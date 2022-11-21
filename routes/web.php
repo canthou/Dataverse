@@ -8,4 +8,7 @@ Route::get(
     [UserController::class, 'index']
 )->name('home');
 
-
+Route::get(
+    'new_user',
+    [UserController::class, 'new_user']
+)->name('new_user');

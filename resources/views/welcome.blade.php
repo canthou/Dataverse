@@ -35,7 +35,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <input type="submit" class="btn btn-primary" value="Εγγραφή Νέου Χρήστη">
+                    <a href="{{ route('new_user') }}" class="btn btn-primary">Εγγραφή Νέου Χρήστη</a>
                 </div>
             </div>
         </div>
