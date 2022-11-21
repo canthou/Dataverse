@@ -10,5 +10,12 @@ Route::get(
 
 Route::get(
     'new_user',
-    [UserController::class, 'new_user']
+    function(){
+        return view('new_user');
+    }
 )->name('new_user');
+
+Route::post(
+    'add_new_user',
+    [UserController::class, 'new_user']
+)->name('add_new_user');

@@ -12,23 +12,45 @@
     <div class="main_content pt-5">
         <div class="container">
             <div class="row">
+
+                @if(session()->has('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <div class="col-md-12">
-                    <table class="table">
+                    <table class="table table-bordered table-striped">
                         <thead>
                           <tr>
                             <th scope="col">Όνομα</th>
                             <th scope="col">Όνομα Χρήστη</th>
                             <th scope="col">Δικαιώματα</th>
                             <th scope="col">Ενεργός</th>
+                            <th scope="col">Ενέργειες</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                          </tr>
+                            @forelse ($all_users as $user)
+                            <tr>
+                                <th scope="row">
+                                    {{ $user->name }}
+                                </th>
+                                <td>
+                                    {{ $user->username }}
+                                </td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->is_active }}</td>
+                                <td>
+                                    <a href="{{ route('edit_user', $user->id) }}">Επεξεργασία</a>
+                                    <a href="{{ route('delete', $user->id) }}" onClick="return confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε το χρήστη;')">Διαγραφή</a>
+                                </td>
+                            @empty
+                                Δεν υπάρχουν εγγραφές στον πίνακα!
+                            </tr>
+                            @endforelse
+                            
+                          
                         </tbody>
                     </table>                    
                 </div>
