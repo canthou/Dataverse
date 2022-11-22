@@ -98,15 +98,16 @@ class UserController extends Controller
                 $updated_user->is_active = 0;
             }
             $updated_user->update();
-            // $roles = $request->get('admin-role');
+            $updated_user->roles()->detach();
+            $uroles = $request->get('admin-role');
             
-            // foreach($roles as $role){
-            //     $permission = Dv_users_roles_has_dv_user::where('dv_users_id', $id)->first();
-            //     $permission_id = Dv_users_role::select('id')->where('name', $role)->first()['id'];
-            //     $permission->dv_users_roles_id = $permission_id;
-            //     $permission->dv_users_id = $id;
-            //     $permission->update();
-            // }
+            foreach($uroles as $role){
+                $permission = new Dv_users_roles_has_dv_user();
+                $permission_id = Dv_users_role::select('id')->where('name', $role)->first()['id'];
+                $permission->dv_users_roles_id = $permission_id;
+                $permission->dv_users_id = $id;
+                $permission->save();
+            }
 
         });
         return redirect()->route('home')->with('success','Επιτυχής ενημέρωση!');
