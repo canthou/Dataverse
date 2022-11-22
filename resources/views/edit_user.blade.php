@@ -12,19 +12,20 @@
     <div class="main_content pt-5">
         <div class="container">
             <div class="row">
-              <form action="{{ route('add_new_user') }}" method="POST" class="was-validated" id="add_new_user">
+              <form action="{{ route('update_user', $current_user->id) }}" method="POST" class="was-validated" id="add_new_user">
                 @csrf
 
                 {{-- Ενεργός --}}
                 <div class="mb-3 form-check">
-                  <input type="checkbox" class="form-check-input" id="active" name="active">
+                  <input type="checkbox" class="form-check-input" id="active" name="active" 
+                  @checked($current_user->is_active == 1)>
                   <label class="form-check-label" for="active">Ενεργός</label>
                 </div>
 
                 {{-- Ονοματεπώνυμο --}}
                 <div class="col-md-6">
                   <label for="name" class="form-label fw-bold">Ονοματεπώνυμο</label>
-                  <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
+                  <input type="text" class="form-control" id="name" name="name" value="{{ $current_user->name }}" required>
                   <div class="valid-feedback">Έγκυρο.</div>
                   <div class="invalid-feedback">Μη Έγκυρο.</div>
                   @error('name')
@@ -35,7 +36,7 @@
                 {{-- Όνομα Χρήστη --}}
                 <div class="col-md-6">
                   <label for="username" class="form-label fw-bold">Όνομα Χρήστη</label>
-                  <input type="text" class="form-control" id="username" name="username" value="{{ old('username') }}" required>
+                  <input type="text" class="form-control" id="username" name="username" value="{{ $current_user->username }}" required>
                   <div class="valid-feedback">Έγκυρο.</div>
                   <div class="invalid-feedback">Μη Έγκυρο.</div>
                   @error('username')
@@ -46,7 +47,7 @@
                 {{-- Κωδικός --}}
                 <div class="col-md-6">
                     <label for="password" class="col-md-4 col-form-label text-md-right fw-bold">Κωδικός</label>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" value="{{ $current_user->password }}">
                     <div class="valid-feedback">Έγκυρο.</div>
                     <div class="invalid-feedback">Μη Έγκυρο.</div>
 
@@ -62,7 +63,7 @@
                   <label for="password" class="col-md-4 col-form-label text-md-right fw-bold">Επιβεβαίωση Κωδικού</label>
                   <input id="password" type="password" 
                     class="form-control @error('password') is-invalid @enderror" 
-                    name="password_confirmation" required autocomplete="current-password">
+                    name="password_confirmation" required autocomplete="current-password" value="{{ $current_user->password }}">
                     
                   <div class="valid-feedback">Έγκυρο.</div>
                   <div class="invalid-feedback">Μη Έγκυρο.</div>
@@ -71,7 +72,7 @@
                 {{-- Email --}}
                 <div class="col-md-6">
                   <label for="email" class="form-label fw-bold">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+                  <input type="email" class="form-control" id="email" name="email" value="{{ $current_user->email }}" required>
                   <div class="valid-feedback">Έγκυρο.</div>
                   <div class="invalid-feedback">Μη Έγκυρο.</div>
                   @error('email')
@@ -83,41 +84,18 @@
 
                   <label for="permissions">Δικαιώματα</label>
                   
-                  {{-- Τεχνικός Διαχειριστής --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="technical-admin" name='admin-role[]' value="Τεχνικός Διαχειριστής">
-                    <label class="form-check-label" for="technical-admin">Τεχνικός Διαχειριστής</label>
-                  </div>
+                  @foreach($all_roles as $role)
 
-                  {{-- Διαχειριστής χρηστών και συνδρομών --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="user-subs-admin" name='admin-role[]' value="Διαχειριστής χρηστών και συνδρομών">
-                    <label class="form-check-label" for="user-subs-admin">Διαχειριστής χρηστών και συνδρομών</label>
-                  </div>
-
-                  {{-- Διαχειριστής ερωτημάτων/απαντήσεων --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="qa-admin" name='admin-role[]' value="Διαχειριστής ερωτημάτων/απαντήσεων">
-                    <label class="form-check-label" for="qa-admin">Διαχειριστής ερωτημάτων/απαντήσεων</label>
-                  </div>
-
-                  {{-- Διαχειριστής Περιεχομένου --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="content-admin" name='admin-role[]' value="Διαχειριστής Περιεχομένου">
-                    <label class="form-check-label" for="content-admin">Διαχειριστής Περιεχομένου</label>
-                  </div>
-
-                  {{-- Διαχειριστής νομολογίας - νομοθεσίας --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="law-admin" name='admin-role[]' value="Διαχειριστής νομολογίας - νομοθεσίας">
-                    <label class="form-check-label" for="law-admin">Διαχειριστής νομολογίας - νομοθεσίας</label>
-                  </div>
-
-                  {{-- Διαχειριστής ενημερωτικών δελτίων και νέων --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="news-admin" name='admin-role[]' value="Διαχειριστής ενημερωτικών δελτίων και νέων">
-                    <label class="form-check-label" for="news-admin">Διαχειριστής ενημερωτικών δελτίων και νέων</label>
-                  </div>
+                    <div class="mb-3 form-check">
+                      <input type="checkbox" class="form-check-input" name='admin-role[]' value="{{ $role['name'] }}"
+                      @foreach ($current_user->roles as $urole)
+                        @checked($urole['name'] == $role['name'])
+                      @endforeach
+                      >
+                      <label class="form-check-label">{{ $role['name'] }}</label>
+                    </div>
+                    
+                  @endforeach
 
                 </div>
 

@@ -9,4 +9,9 @@ class Dv_users_role extends Model
 {
     use HasFactory;
     public $timestamps = false; 
+
+    public function users()
+    {
+        return $this->belongsToMany(DvUser::class);
+    }
 }

@@ -83,41 +83,13 @@
 
                   <label for="permissions">Δικαιώματα</label>
                   
-                  {{-- Τεχνικός Διαχειριστής --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="technical-admin" name='admin-role[]' value="Τεχνικός Διαχειριστής">
-                    <label class="form-check-label" for="technical-admin">Τεχνικός Διαχειριστής</label>
-                  </div>
-
-                  {{-- Διαχειριστής χρηστών και συνδρομών --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="user-subs-admin" name='admin-role[]' value="Διαχειριστής χρηστών και συνδρομών">
-                    <label class="form-check-label" for="user-subs-admin">Διαχειριστής χρηστών και συνδρομών</label>
-                  </div>
-
-                  {{-- Διαχειριστής ερωτημάτων/απαντήσεων --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="qa-admin" name='admin-role[]' value="Διαχειριστής ερωτημάτων/απαντήσεων">
-                    <label class="form-check-label" for="qa-admin">Διαχειριστής ερωτημάτων/απαντήσεων</label>
-                  </div>
-
-                  {{-- Διαχειριστής Περιεχομένου --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="content-admin" name='admin-role[]' value="Διαχειριστής Περιεχομένου">
-                    <label class="form-check-label" for="content-admin">Διαχειριστής Περιεχομένου</label>
-                  </div>
-
-                  {{-- Διαχειριστής νομολογίας - νομοθεσίας --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="law-admin" name='admin-role[]' value="Διαχειριστής νομολογίας - νομοθεσίας">
-                    <label class="form-check-label" for="law-admin">Διαχειριστής νομολογίας - νομοθεσίας</label>
-                  </div>
-
-                  {{-- Διαχειριστής ενημερωτικών δελτίων και νέων --}}
-                  <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="news-admin" name='admin-role[]' value="Διαχειριστής ενημερωτικών δελτίων και νέων">
-                    <label class="form-check-label" for="news-admin">Διαχειριστής ενημερωτικών δελτίων και νέων</label>
-                  </div>
+                  @foreach($all_roles as $role)
+                    <div class="mb-3 form-check">
+                      <input type="checkbox" class="form-check-input" name='admin-role[]' value="{{ $role['name'] }}"
+                      >
+                      <label class="form-check-label">{{ $role['name'] }}</label>
+                    </div>
+                  @endforeach
 
                 </div>
 

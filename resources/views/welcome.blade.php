@@ -31,7 +31,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                            @forelse ($all_users as $user)
+                            @forelse($all_users as $user)
                             <tr>
                                 <th scope="row">
                                     {{ $user->name }}
@@ -43,7 +43,7 @@
                                 <td>{{ $user->is_active }}</td>
                                 <td>
                                     <a href="{{ route('edit_user', $user->id) }}">Επεξεργασία</a>
-                                    <a href="{{ route('delete', $user->id) }}" onClick="return confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε το χρήστη;')">Διαγραφή</a>
+                                    <a href="{{ route('delete_user', $user->id) }}" onClick="return confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε το χρήστη;')">Διαγραφή</a>
                                 </td>
                             @empty
                                 Δεν υπάρχουν εγγραφές στον πίνακα!
