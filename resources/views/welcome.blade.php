@@ -39,7 +39,13 @@
                                 <td>
                                     {{ $user->username }}
                                 </td>
-                                <td>{{ $user->email }}</td>
+                                <td>
+                                    @forelse ($user->roles as $role)
+                                        {{ $role['name'] }}<br>
+                                    @empty
+                                        Δεν υπάρχουν ρόλοι στο συγκεκριμένο χρήστη
+                                    @endforelse
+                                </td>
                                 <td>{{ $user->is_active }}</td>
                                 <td>
                                     <a href="{{ route('edit_user', $user->id) }}">Επεξεργασία</a>

@@ -116,7 +116,8 @@ class UserController extends Controller
     public function delete_user($id)
     {   
         DB::transaction(function() use($id){
-            $deleted_user = DvUser::where('id', $id)->first();
+            $deleted_user = DvUser::find($id);
+            $deleted_user->roles()->delete();
             $deleted_user->delete();
         });
         return redirect()->back()->with('success', 'Επιτυχής Διαγραφή!');
