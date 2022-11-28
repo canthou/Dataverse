@@ -32,8 +32,8 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'username' => 'required|unique:dv_users',
-            'email' => 'required|email'
-            // 'password' => 'required|confirmed'
+            'email' => 'required|email',
+            'password' => 'required|confirmed'
         ]);
         
         if($validator->fails())
@@ -50,6 +50,7 @@ class UserController extends Controller
                 $new_user->name = $request->name;
                 $new_user->username = $request->username;
                 $new_user->password = $request->password;
+                $new_user->password = $request->password_confirmation;
                 $new_user->email = $request->email;
                 $new_user->wp_users_ID = rand(1,50);
                 if($request->has('active')){
@@ -70,7 +71,6 @@ class UserController extends Controller
 
             });
             
-
             return response()->json(['status' => 200, 'msg'=> 'Επιτυχής Καταχώρηση']);
         }
     }

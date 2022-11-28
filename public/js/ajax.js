@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
             'name': $('#name').val(),
             'username': $('#username').val(),
             'password': $('#password').val(),
-            'password-check': $('#password-check').val(),
+            'password_confirmation': $('#password-check').val(),
             'email': $('#email').val(),
             'roles': roles
         }
@@ -59,7 +59,7 @@ jQuery(document).ready(function(){
                 console.log(result)
                 alert(result.msg)
                 $('#UserModal').modal('hide')
-                window.location.href = '/'
+                // window.location.href = '/'
                 // fetchuser()
             }
         });
