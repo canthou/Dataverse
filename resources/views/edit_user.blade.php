@@ -99,7 +99,7 @@
 
                 </div>
 
-                <button type="submit" class="btn btn-primary">Καταχώρηση</button>
+                <button type="submit" class="btn btn-primary" id="add-btn">Καταχώρηση</button>
 
               </form>
             </div>

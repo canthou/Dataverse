@@ -19,48 +19,60 @@ class UserController extends Controller
         return view('welcome', compact('all_users', 'all_roles'));
     }
     
-    public function create_new_user()
+    public function fetchuser()
     {
-        $all_roles = Dv_users_role::get();
-        return view('new_user', compact('all_roles'));
+        $all_users = DvUser::all();
+        return response()->json([
+            'users'=>$all_users,
+        ]);
     }
     
     public function new_user(Request $request)
     {
-        DB::transaction(function() use($request){
-
-            $request->validate([
-                'name' => 'required',
-                'username' => 'required|unique:dv_users',
-                'email' => 'required|email',
-                'password' => 'required|confirmed'
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'username' => 'required|unique:dv_users',
+            'email' => 'required|email'
+            // 'password' => 'required|confirmed'
+        ]);
+        
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages()
             ]);
+        }
+        else
+        {
+            DB::transaction(function() use($request){
+                $new_user = new DvUser();
+                $new_user->name = $request->name;
+                $new_user->username = $request->username;
+                $new_user->password = $request->password;
+                $new_user->email = $request->email;
+                $new_user->wp_users_ID = rand(1,50);
+                if($request->has('active')){
+                    $new_user->is_active = 1;
+                }
+                $new_user->save();
+
+                $new_user_id = DvUser::select('id')->orderBy('id', 'desc')->first()['id'];
+                $roles = $request->roles;
+
+                foreach($roles as $role){
+                    $permission = new Dv_users_roles_has_dv_user();
+                    $permission_id = Dv_users_role::select('id')->where('name', $role)->first()['id'];
+                    $permission->dv_users_roles_id = $permission_id;
+                    $permission->dv_users_id = $new_user_id;
+                    $permission->save();
+                }
+
+            });
             
-            $new_user = new DvUser();
-            $new_user->name = $request->name;
-            $new_user->username = $request->username;
-            $new_user->password = $request->password;
-            $new_user->email = $request->email;
-            $new_user->wp_users_ID = rand(1,50);
-            if($request->has('active')){
-                $new_user->is_active = 1;
-            }
-            $new_user->save();
 
-            $new_user_id = DvUser::select('id')->orderBy('id', 'desc')->first()['id'];
-            $roles = $request->get('admin-role');
-
-            foreach($roles as $role){
-                $permission = new Dv_users_roles_has_dv_user();
-                $permission_id = Dv_users_role::select('id')->where('name', $role)->first()['id'];
-                $permission->dv_users_roles_id = $permission_id;
-                $permission->dv_users_id = $new_user_id;
-                $permission->save();
-            }
-
-        });
-
-        return redirect()->route('home')->with('success','Επιτυχής καταχώρηση!');
+            return response()->json(['status' => 200, 'msg'=> 'Επιτυχής Καταχώρηση']);
+        }
     }
 
     public function edit_user($id)
